@@ -14,7 +14,7 @@ router.post('/', async (req, res, next) => {
       name: wish.name,
       presents: [],
     }));
-    await write(path.join(__dirname, '../db/presents.json'), toWrite);
+    await write(path.join(__dirname, '../db/presents.json'), JSON.stringify(toWrite, null, 2));
 
     res.status(200).json({
       data: 'file written',
