@@ -3,7 +3,7 @@ const path = require('path');
 const { read, write, createError } = require('../utils');
 
 const wishesDbPath = path.join(__dirname, '../db/wishes.json');
-const scoresDbPath = path.join(__dirname, '../db/scores.json')
+const scoresDbPath = path.join(__dirname, '../db/scores.json');
 
 const router = express.Router();
 
@@ -14,9 +14,9 @@ router.get('/', async (req, res, next) => {
     const scores = await read(scoresDbPath);
 
     const wishesWithScore = wishes.reduce((acc, next) => {
-      const score = scores.filter(score => score.name === next.name)[0].score
-      return [...acc, {...next, score}]
-    }, [])
+      const score = scores.filter((score) => score.name === next.name)[0].score;
+      return [...acc, { ...next, score }];
+    }, []);
 
     if (present) {
       const filteredWishes = wishesWithScore.filter((wish) =>
@@ -51,9 +51,9 @@ router.get('/:name', async (req, res, next) => {
     const scores = await read(scoresDbPath);
 
     const wishesWithScore = wishes.reduce((acc, next) => {
-      const score = scores.filter(score => score.name === next.name)[0].score
-      return [...acc, {...next, score}]
-    }, [])
+      const score = scores.filter((score) => score.name === next.name)[0].score;
+      return [...acc, { ...next, score }];
+    }, []);
 
     const unique = wishesWithScore.filter((wish) => wish.name.toLowerCase() === name);
     if (!unique.length > 0) {
