@@ -138,4 +138,29 @@ router.put('/:name', async (req, res, next) => {
   }
 });
 
+router.delete('/:name', async (req, res, next) => {
+  try {
+    const name = req.params.name.toLowerCase();
+    const presentsList = await read(presentsDbPath);
+    const presentFiltered = presentsList.filter((kid) => kid.name.toLowerCase() !== name);
+
+    if (presentFiltered.length === presentsList.length) {
+      createError('No kid with that name', 404);
+      return;
+    }
+
+    await write(presentsDbPath, presentFiltered)
+
+    res.status(200).json({
+      data: {
+        newData: presentFiltered,
+      },
+      status: 'ok',
+    });
+  } catch (error) {
+    next(error);
+    return;
+  }
+})
+
 module.exports = router;
