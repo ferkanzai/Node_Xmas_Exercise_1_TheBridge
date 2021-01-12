@@ -1,38 +1,67 @@
 [
   {
     "name": "Sol",
-    "presents": []
+    "presents": [
+      "coffee",
+      "holidays"
+    ]
   },
   {
     "name": "Molpe",
-    "presents": []
+    "presents": [
+      "coffee",
+      "coal"
+    ]
   },
   {
     "name": "Zineb",
-    "presents": []
+    "presents": [
+      "computer",
+      "coal"
+    ]
   },
   {
     "name": "David",
-    "presents": []
+    "presents": [
+      "clothes",
+      "car"
+    ]
   },
   {
     "name": "Dani",
-    "presents": []
+    "presents": [
+      "clothes",
+      "videogames",
+      "coal"
+    ]
   },
   {
     "name": "Elisa",
-    "presents": []
+    "presents": [
+      "phone",
+      "holidays"
+    ]
   },
   {
     "name": "Fernando",
-    "presents": []
+    "presents": [
+      "motorbike",
+      "coal"
+    ]
   },
   {
     "name": "Silvia",
-    "presents": []
+    "presents": [
+      "phone",
+      "motorbike",
+      "coal"
+    ]
   },
   {
     "name": "Isabel",
-    "presents": []
+    "presents": [
+      "tattoo",
+      "car"
+    ]
   }
 ]
