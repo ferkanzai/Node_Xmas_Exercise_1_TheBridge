@@ -30,32 +30,47 @@ router.post('/', async (req, res, next) => {
 router.put('/:name', async (req, res, next) => {
   try {
     const name = req.params.name.toLowerCase();
-    const presents = await read(presentsDbPath);
-    const presentsKid = await read(presentsDbPath);
-    const presentFiltered = presentsKid.filter((kid) => kid.name.toLowerCase() === name);
+    const presentsList = await read(presentsDbPath);
+    const presentFiltered = presentsList.filter((kid) => kid.name.toLowerCase() === name);
     const wishesKid = await read(wishesDbPath);
-    const wishesFiltered = wishesKid.filter((kid) => kid.name.toLowerCase() === name);
+    const wishesFiltered = wishesKid.filter((kid) => kid.name.toLowerCase() === name)[0];
     const scoresKid = await read(scoresDbPath);
-    const scoresFiltered = scoresKid.filter((kid) => kid.name.toLowerCase() === name);
+    const scoresFiltered = scoresKid.filter((kid) => kid.name.toLowerCase() === name)[0];
 
-    console.log(presentFiltered);
-    console.log(wishesFiltered);
-    console.log(scoresFiltered);
-
-    if (scoresKid.score > 7) {
-      console.log(true)
-      const toWrite = presents.map((present) => {
-        if (present.name.toLowerCase() === name) {
-          present.presents = wishesFiltered.presents;
-        }
-        return present;
-      });
-      await write(presentsDbPath, toWrite);
+    if (!presentFiltered.length > 0) {
+      createError('No kid with that name', 404);
     }
+
+    if (presentFiltered[0].presents.length !== 0) {
+      createError('This kid has presents already!!', 409)
+    }
+
+    let presentsToWrite = [];
+
+    if (scoresFiltered.score > 7) {
+      presentsToWrite = wishesFiltered.presents;
+    } else if (scoresFiltered.score < 5) {
+      presentsToWrite = [wishesFiltered.presents[0], 'coal'];
+    } else if (scoresFiltered.score >= 5 || scoresFiltered.score <= 7) {
+      presentsToWrite = [...wishesFiltered.presents, 'coal'];
+    }
+
+    console.log(presentsToWrite)
+
+    presentFiltered[0].presents = presentsToWrite
+
+    const toWrite = presentsList.map((el) => {
+      if (el.name === name) {
+        el = presentFiltered[0]
+      }
+      return el;
+    });
+
+    await write(presentsDbPath, JSON.stringify(toWrite, null, 2));
 
     res.status(200).json({
       data: {
-        toWrite,
+        newData: presentFiltered[0],
       },
       status: 'ok',
     });
