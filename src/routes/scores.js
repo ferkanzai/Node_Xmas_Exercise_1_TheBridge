@@ -40,7 +40,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:score', async (req, res, next) => {
+router.get('/:name', async (req, res, next) => {
   try {
     const name = req.params.name.toLowerCase();
     const scores = await read(scoresDbPath);
