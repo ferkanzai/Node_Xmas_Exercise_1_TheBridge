@@ -25,6 +25,7 @@ router.post('/', async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+    return
   }
 });
 
@@ -78,6 +79,7 @@ router.put('/money/:name', async (req, res, next) => {
     }
   } catch (error) {
     next(error);
+    return
   }
 });
 
@@ -93,10 +95,12 @@ router.put('/:name', async (req, res, next) => {
 
     if (!presentFiltered.length > 0) {
       createError('No kid with that name', 404);
+      return;
     }
 
     if (presentFiltered[0].presents.length !== 0) {
       createError('This kid has presents already!!', 409);
+      return;
     }
 
     let presentsToWrite = [];
@@ -130,6 +134,7 @@ router.put('/:name', async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+    return;
   }
 });
 

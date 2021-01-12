@@ -24,6 +24,7 @@ router.get('/', async (req, res, next) => {
       );
       if (!filteredWishes.length > 0) {
         createError('That type of present does not exist', 404);
+        return
       }
       res.status(200).json({
         data: {
@@ -31,6 +32,7 @@ router.get('/', async (req, res, next) => {
         },
         status: 'ok',
       });
+      return
     }
 
     res.status(200).json({
@@ -41,6 +43,7 @@ router.get('/', async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+    return
   }
 });
 
@@ -67,6 +70,7 @@ router.get('/:name', async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+    return
   }
 });
 

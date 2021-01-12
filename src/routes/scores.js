@@ -12,12 +12,12 @@ router.get('/', async (req, res, next) => {
     const scoresList = await read(scoresDbPath);
 
     if (score) {
-      // Not working, but if you do the same on a repl.it it works. Why does not work on Node/Express??!
       const filteredScores = scoresList.filter((scoresList) =>
         scoresList.score > Number(score) ? score : false
       );
       if (!filteredScores.length > 0) {
         createError(`Nobody has more score than ${score}`, 404);
+        return;
       }
       res.status(200).json({
         data: {
@@ -25,6 +25,7 @@ router.get('/', async (req, res, next) => {
         },
         status: 'ok',
       });
+      return;
     }
 
     res.status(200).json({
@@ -35,6 +36,7 @@ router.get('/', async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+    return;
   }
 });
 
@@ -45,6 +47,7 @@ router.get('/:score', async (req, res, next) => {
     const unique = scores.filter((score) => score.name.toLowerCase() === name);
     if (!unique.length > 0) {
       createError('No kid with that name', 404);
+      return;
     }
     res.status(200).json({
       data: {
@@ -54,6 +57,7 @@ router.get('/:score', async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+    return;
   }
 });
 
