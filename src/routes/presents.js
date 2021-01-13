@@ -188,7 +188,7 @@ router.delete('/:name', async (req, res, next) => {
       return;
     }
 
-    await write(presentsDbPath, presentFiltered);
+    await write(presentsDbPath, JSON.stringify(presentFiltered, null, 2));
 
     res.status(200).json({
       data: {

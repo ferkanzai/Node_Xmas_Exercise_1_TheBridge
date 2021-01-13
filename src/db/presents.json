@@ -7,13 +7,6 @@
     ]
   },
   {
-    "name": "Molpe",
-    "presents": [
-      "coal",
-      "coffee"
-    ]
-  },
-  {
     "name": "Zineb",
     "presents": [
       "coal"
@@ -39,12 +32,6 @@
     "presents": [
       "phone",
       "holidays"
-    ]
-  },
-  {
-    "name": "Fernando",
-    "presents": [
-      "coal"
     ]
   },
   {
