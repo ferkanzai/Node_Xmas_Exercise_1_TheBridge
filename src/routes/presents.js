@@ -1,13 +1,40 @@
 const express = require('express');
+const { restart } = require('nodemon');
 const path = require('path');
-const { read, write, createError } = require('../utils');
+const { read, write, createError, checkPresentsForMoney } = require('../utils');
 
 const wishesDbPath = path.join(__dirname, '../db/wishes.json');
 const presentsDbPath = path.join(__dirname, '../db/presents.json');
 const scoresDbPath = path.join(__dirname, '../db/scores.json');
 const pricesDbPath = path.join(__dirname, '../db/prices.json');
 
+function sortPrice(a, b) {
+  if (a.price < b.price) {
+    return -1;
+  }
+  if (a.price > b.price) {
+    return 1;
+  }
+  return 0;
+}
+
 const router = express.Router();
+
+router.get('/', async (req, res, next) => {
+  try {
+    const presentsList = await read(presentsDbPath);
+
+    res.status(200).json({
+      data: {
+        presentsList
+      },
+      status: 'ok'
+    })
+  } catch (error) {
+    next(error);
+    return;
+  }
+});
 
 router.post('/', async (req, res, next) => {
   try {
@@ -25,7 +52,7 @@ router.post('/', async (req, res, next) => {
     });
   } catch (error) {
     next(error);
-    return
+    return;
   }
 });
 
@@ -35,8 +62,6 @@ router.put('/money/:name', async (req, res, next) => {
     const presentsList = await read(presentsDbPath);
     const presentFiltered = presentsList.filter((kid) => kid.name.toLowerCase() === name);
     const presentsForKid = presentFiltered[0].presents;
-    const wishesKid = await read(wishesDbPath);
-    const wishesFiltered = wishesKid.filter((kid) => kid.name.toLowerCase() === name)[0];
     const scoresKid = await read(scoresDbPath);
     const scoresFiltered = scoresKid.filter((kid) => kid.name.toLowerCase() === name)[0];
     const pricesList = await read(pricesDbPath);
@@ -54,11 +79,7 @@ router.put('/money/:name', async (req, res, next) => {
       return [...acc, priceToAdd];
     }, []);
 
-    console.log(presentsForKidPrices);
-
-    const totalMoney = presentsForKidPrices.reduce((acc, next) => acc + next.price, 0);
-
-    console.log(totalMoney);
+    const sorted = presentsForKidPrices.sort(sortPrice);
 
     if (!presentFiltered.length > 0) {
       createError('No kid with that name', 404);
@@ -69,17 +90,37 @@ router.put('/money/:name', async (req, res, next) => {
 
     if (scoresFiltered.score > 8) {
       moneyToSpend = 7000;
-      presentsToWrite = wishesFiltered.presents;
+      presentsToWrite = checkPresentsForMoney(sorted, moneyToSpend);
     } else if (scoresFiltered.score < 5) {
       moneyToSpend = 300;
-      presentsToWrite = [wishesFiltered.presents[0], 'coal'];
+      presentsToWrite = checkPresentsForMoney(sorted, moneyToSpend);
     } else if (scoresFiltered.score >= 5 || scoresFiltered.score <= 8) {
       moneyToSpend = 2000;
-      presentsToWrite = [...wishesFiltered.presents, 'coal'];
+      presentsToWrite = checkPresentsForMoney(sorted, moneyToSpend);
     }
+
+    console.log(presentsToWrite);
+
+    presentFiltered[0].presents = presentsToWrite;
+
+    const toWrite = presentsList.map((el) => {
+      if (el.name === name) {
+        el = presentFiltered[0];
+      }
+      return el;
+    });
+
+    await write(presentsDbPath, JSON.stringify(toWrite, null, 2));
+
+    res.status(200).json({
+      data: {
+        newData: presentFiltered[0],
+      },
+      status: 'ok',
+    });
   } catch (error) {
     next(error);
-    return
+    return;
   }
 });
 
@@ -112,8 +153,6 @@ router.put('/:name', async (req, res, next) => {
     } else if (scoresFiltered.score >= 5 || scoresFiltered.score <= 7) {
       presentsToWrite = [...wishesFiltered.presents, 'coal'];
     }
-
-    console.log(presentsToWrite);
 
     presentFiltered[0].presents = presentsToWrite;
 
@@ -149,7 +188,7 @@ router.delete('/:name', async (req, res, next) => {
       return;
     }
 
-    await write(presentsDbPath, presentFiltered)
+    await write(presentsDbPath, presentFiltered);
 
     res.status(200).json({
       data: {
@@ -161,6 +200,6 @@ router.delete('/:name', async (req, res, next) => {
     next(error);
     return;
   }
-})
+});
 
 module.exports = router;

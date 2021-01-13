@@ -9,14 +9,13 @@
   {
     "name": "Molpe",
     "presents": [
-      "coffee",
-      "coal"
+      "coal",
+      "coffee"
     ]
   },
   {
     "name": "Zineb",
     "presents": [
-      "computer",
       "coal"
     ]
   },
@@ -30,9 +29,9 @@
   {
     "name": "Dani",
     "presents": [
-      "clothes",
+      "coal",
       "videogames",
-      "coal"
+      "clothes"
     ]
   },
   {
@@ -45,16 +44,14 @@
   {
     "name": "Fernando",
     "presents": [
-      "motorbike",
       "coal"
     ]
   },
   {
     "name": "Silvia",
     "presents": [
-      "phone",
-      "motorbike",
-      "coal"
+      "coal",
+      "phone"
     ]
   },
   {
