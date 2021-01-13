@@ -17,8 +17,18 @@ const createError = (message, code) => {
   throw error;
 };
 
+const checkPresentsForMoney = (arr, money = 0, newPresents = []) => {
+  if (!arr.length) return newPresents;
+  if (money >= arr[0].price) {
+    newPresents.push(arr[0].present);
+    money -= arr[0].price;
+  }
+  return checkPresentsForMoney(arr.splice(1), money, newPresents);
+};
+
 module.exports = {
   read,
   write,
   createError,
+  checkPresentsForMoney,
 };
