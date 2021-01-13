@@ -26,10 +26,10 @@ router.get('/', async (req, res, next) => {
 
     res.status(200).json({
       data: {
-        presentsList
+        presentsList,
       },
-      status: 'ok'
-    })
+      status: 'ok',
+    });
   } catch (error) {
     next(error);
     return;
@@ -102,6 +102,37 @@ router.put('/money/:name', async (req, res, next) => {
     console.log(presentsToWrite);
 
     presentFiltered[0].presents = presentsToWrite;
+
+    const toWrite = presentsList.map((el) => {
+      if (el.name === name) {
+        el = presentFiltered[0];
+      }
+      return el;
+    });
+
+    await write(presentsDbPath, JSON.stringify(toWrite, null, 2));
+
+    res.status(200).json({
+      data: {
+        newData: presentFiltered[0],
+      },
+      status: 'ok',
+    });
+  } catch (error) {
+    next(error);
+    return;
+  }
+});
+
+router.put('/add/:name', async (req, res, next) => {
+  try {
+    const name = req.params.name.toLowerCase();
+    const { present } = req.body;
+    console.log(req.body)
+    const presentsList = await read(presentsDbPath);
+    const presentFiltered = presentsList.filter((kid) => kid.name.toLowerCase() === name);
+
+    presentFiltered[0].presents.push(present);
 
     const toWrite = presentsList.map((el) => {
       if (el.name === name) {

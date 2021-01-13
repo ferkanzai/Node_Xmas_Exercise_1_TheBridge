@@ -3,12 +3,14 @@
     "name": "Sol",
     "presents": [
       "coffee",
-      "holidays"
+      "holidays",
+      "socks"
     ]
   },
   {
     "name": "Zineb",
     "presents": [
+      "coal",
       "coal"
     ]
   },
@@ -16,7 +18,8 @@
     "name": "David",
     "presents": [
       "clothes",
-      "car"
+      "car",
+      "socks"
     ]
   },
   {
@@ -24,28 +27,32 @@
     "presents": [
       "coal",
       "videogames",
-      "clothes"
+      "clothes",
+      "coal"
     ]
   },
   {
     "name": "Elisa",
     "presents": [
       "phone",
-      "holidays"
+      "holidays",
+      "socks"
     ]
   },
   {
     "name": "Silvia",
     "presents": [
       "coal",
-      "phone"
+      "phone",
+      "coal"
     ]
   },
   {
     "name": "Isabel",
     "presents": [
       "tattoo",
-      "car"
+      "car",
+      "socks"
     ]
   }
 ]
